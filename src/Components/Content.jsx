@@ -23,19 +23,34 @@ export default function VehicleSection() {
   const handleThumbnailClick = (video) => {
     setSelectedVideo(video);
   };
+    // Add animation variants
+    const fadeVariants = {
+      hidden: { opacity: 0, y: 20 },
+      visible: { opacity: 1, y: 0 },
+      exit: { opacity: 0, y: -20 }
+    };
+  
+    const categoryVariants = {
+      active: { color: "#ffffff", scale: 1.05 },
+      inactive: { color: "#6b7280", scale: 1 }
+    };
 
-  const handleScroll = () => {
-    const scrollTop = window.scrollY;
-    const pageHeight = document.documentElement.scrollHeight - window.innerHeight;
-    const progress = (scrollTop / pageHeight) * 100;
-    setScrollProgress(progress);
-    
-    let newCategory = progress < 50 ? "passenger" : "commercial";
-    if (newCategory !== selectedCategory) {
-      setSelectedCategory(newCategory);
-      setSelectedVideo(videoData[newCategory][0]?.video);
-    }
-  };
+    const handleScroll = () => {
+      const scrollTop = window.scrollY;
+      const pageHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = (scrollTop / pageHeight) * 100;
+      setScrollProgress(progress);
+      console.log(progress);
+      
+      // Add smooth category transition
+      requestAnimationFrame(() => {
+        let newCategory = progress < 50 ? "passenger" : "commercial";
+        if (newCategory !== selectedCategory) {
+          setSelectedCategory(newCategory);
+          setSelectedVideo(videoData[newCategory][0]?.video);
+        }
+      });
+    };
 
   const togglePlayPause = () => {
     if (videoRef.current) {
@@ -54,7 +69,7 @@ export default function VehicleSection() {
   }, [selectedCategory]);
 
   return (
-    <div className="flex-col w-full bg-black text-white relative">
+    <div className="flex-col w-full bg-black text-white relative overflow-y-hidden">
       <div className="text-white pb-2 md:text-5xl text-center md:mx-60 py-30 text-2xl px-2">
       Evolving the drive with <span className="font-bold"> 360-degree </span>comprehensive
        solutions
@@ -62,48 +77,100 @@ export default function VehicleSection() {
       <div className="mx-30 hidden md:flex">
         {/* Left Section */}
         <div className="w-1/3 flex flex-col justify-center items-start pl-10 relative my-30">
-          <motion.div 
-            className="absolute left-0 top-0 w-1 bg-white" 
-            style={{ height: "100%", background: `inear-gradient(to bottom, ${scrollProgress < 50 ? "white" : "black"} 50%, ${scrollProgress < 50 ? "black" : "white"} 50%` }}
-          />
- 
-          <div className={selectedCategory === "passenger" ? "text-white px-10" : "text-gray-600 px-10"} 
-              onClick={() => setSelectedCategory("passenger")}>
-            <h2 className="text-2xl font-bold cursor-pointer ">Passenger Vehicles</h2>
-            <p>Revving up innovation from interior to exterior.</p>
-          </div>
-          <div className={selectedCategory === "commercial" ? "text-white mt-10 px-10" : "text-gray-600 mt-10 px-10"} 
-              onClick={() => setSelectedCategory("commercial")}>
-            <h2 className="text-2xl font-bold cursor-pointer">Commercial Vehicles</h2>
-            <p>Advancing engineering for heavy-duty vehicles.</p>
-          </div>
+        <motion.div 
+  className="absolute left-0 top-0 w-1 h-full bg-black overflow-hidden"
+  initial={false}
+>
+  <motion.div
+    className="absolute bottom-0 w-full bg-blue-400"
+    animate={{
+      height: `50%`,
+      top: `${scrollProgress>41?90:30}px`
+    }}
+    transition={{ 
+      type: "tween",
+      ease: "easeInOut",
+      duration: 0.5
+    }}
+  />
+</motion.div>
+        <motion.div
+            className="px-10 cursor-pointer"
+            variants={categoryVariants}
+            animate={selectedCategory === "passenger" ? "active" : "inactive"}
+            transition={{ duration: 0.3 }}
+            onClick={() => setSelectedCategory("passenger")}
+          >
+            <h2 className="text-2xl font-bold">Passenger Vehicles</h2>
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5 }}
+            >
+              Revving up innovation from interior to exterior.
+            </motion.p>
+          </motion.div>
+          <motion.div
+            className="mt-10 px-10 cursor-pointer"
+            variants={categoryVariants}
+            animate={selectedCategory === "commercial" ? "active" : "inactive"}
+            transition={{ duration: 0.3 }}
+            onClick={() => setSelectedCategory("commercial")}
+          >
+            <h2 className="text-2xl font-bold">Commercial Vehicles</h2>
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5 }}
+            >
+              Advancing engineering for heavy-duty vehicles.
+            </motion.p>
+          </motion.div>
         </div>
 
         {/* Right Section */}
         <div className="w-2/3 flex flex-col justify-center items-center relative">
-          <video
-            ref={videoRef}
-            key={selectedVideo}
-            src={selectedVideo}
-            autoPlay
-            muted
-            className="w-4/5 h-96 object-cover"
-          />
+       
+            <motion.div
+              key={selectedVideo}
+              initial="hidden"
+              animate="visible"
+              exit="exit"
+              variants={fadeVariants}
+              transition={{ duration: 0.3 }}
+              className="w-4/5 h-96 relative"
+            >
+              <video
+                ref={videoRef}
+                src={selectedVideo}
+                autoPlay
+                muted
+                className="w-full h-full object-cover"
+              />
+            </motion.div>
+      
           <button 
             onClick={togglePlayPause} 
             className="absolute bottom-4 right-4 w-12 h-12 bg-black rounded-full flex items-center justify-center">
             {isPlaying ? "❚❚" : "▶"}
           </button>
           <div className="flex mt-4 space-x-4">
-            {videoData[selectedCategory]?.map((item, index) => (
-              <img 
-                key={index} 
-                src={item.thumbnail} 
-                alt="Thumbnail"
-                className="w-20 h-12 cursor-pointer border-2 border-transparent hover:border-white"
-                onClick={() => handleThumbnailClick(item.video)}
-              />
-            ))}
+         
+              {videoData[selectedCategory]?.map((item, index) => (
+                <motion.img
+                  key={item.video}
+                  initial="hidden"
+                  animate="visible"
+                  exit="hidden"
+                  variants={fadeVariants}
+                  transition={{ delay: index * 0.1, duration: 0.3 }}
+                  src={item.thumbnail}
+                  alt="Thumbnail"
+                  className="w-20 h-12 cursor-pointer border-2 border-transparent hover:border-white"
+                  onClick={() => handleThumbnailClick(item.video)}
+                />
+              ))}
+          
           </div>
         </div>
       </div>

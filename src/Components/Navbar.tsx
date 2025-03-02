@@ -39,7 +39,7 @@ const Header = () => {
           {/* Desktop Navigation */}
           <nav className="hidden md:flex space-x-8">
             <div className="Options md:flex md:gap-10 gap-3 items-center hidden">
-              <button className="bg-[#5cd6ff] px-3 py-1 rounded-full">
+              <button className="bg-[#5cd6ff] px-3 py-1 rounded-full text-gray-800">
                 Contact us
               </button>
               <div>
@@ -83,7 +83,7 @@ const Header = () => {
                 <Languages className="h-5 w-5 text-gray-800" />
                 <span className="uppercase text-xs text-gray-800">Eng</span>
               </div>
-              <button className="bg-[#5cd6ff] px-3 py-1 rounded-full">
+              <button className="bg-[#5cd6ff] px-3 py-1 rounded-full text-gray-800">
                 Contact us
               </button>
             </div>
