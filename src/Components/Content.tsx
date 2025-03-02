@@ -64,8 +64,9 @@ export default function VehicleSection() {
         <div className="w-1/3 flex flex-col justify-center items-start pl-10 relative my-30">
           <motion.div 
             className="absolute left-0 top-0 w-1 bg-white" 
-            style={{ height: "100%", background: `linear-gradient(to top, white ${scrollProgress}%, black ${scrollProgress}%)` }}
+            style={{ height: "100%", background: `inear-gradient(to bottom, ${scrollProgress < 50 ? "white" : "black"} 50%, ${scrollProgress < 50 ? "black" : "white"} 50%` }}
           />
+ 
           <div className={selectedCategory === "passenger" ? "text-white px-10" : "text-gray-600 px-10"} 
               onClick={() => setSelectedCategory("passenger")}>
             <h2 className="text-2xl font-bold cursor-pointer ">Passenger Vehicles</h2>
