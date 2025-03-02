@@ -2,6 +2,8 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { Menu, X, Linkedin, Languages } from "lucide-react";
+import Link from "next/link";
+import Image from "next/image";
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -20,18 +22,18 @@ const Header = () => {
             transition={{ duration: 0.5 }}
             className="flex items-center"
           >
-            <a href="/">
+            <Link href="/">
               <span>
-                <img
+                <Image
                   src="/logo.jpg"
                   alt="supremelogo"
                   className="h-full !cursor-pointer"
                   loading="eager"
-                  height="41"
-                  width="148"
+                  height={41}
+                  width={148}
                 />
               </span>
-            </a>
+            </Link>
           </motion.div>
 
           {/* Desktop Navigation */}
@@ -56,7 +58,11 @@ const Header = () => {
               onClick={toggleMenu}
               className="text-secondary focus:outline-none"
             >
-              {isOpen ? <X size={24} className="text-gray-800"/> : <Menu size={24} className="text-gray-800"/>}
+              {isOpen ? (
+                <X size={24} className="text-gray-800" />
+              ) : (
+                <Menu size={24} className="text-gray-800" />
+              )}
             </button>
           </div>
         </div>
@@ -70,18 +76,16 @@ const Header = () => {
             className="md:hidden mt-4"
           >
             <div className="flex flex-col space-y-4 py-4">
-            
-               
-                <div>
-                  <Linkedin className="h-5 w-5 text-gray-800" />
-                </div>
-                <div className="flex">
-                  <Languages className="h-5 w-5 text-gray-800" />
-                  <span className="uppercase text-xs text-gray-800">Eng</span>
-                </div>
-                <button className="bg-[#5cd6ff] px-3 py-1 rounded-full">
-                  Contact us
-                </button>
+              <div>
+                <Linkedin className="h-5 w-5 text-gray-800" />
+              </div>
+              <div className="flex">
+                <Languages className="h-5 w-5 text-gray-800" />
+                <span className="uppercase text-xs text-gray-800">Eng</span>
+              </div>
+              <button className="bg-[#5cd6ff] px-3 py-1 rounded-full">
+                Contact us
+              </button>
             </div>
           </motion.div>
         )}
