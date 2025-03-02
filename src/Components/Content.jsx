@@ -82,7 +82,7 @@ export default function VehicleSection() {
   initial={false}
 >
   <motion.div
-    className="absolute bottom-0 w-full bg-blue-400"
+    className="absolute bottom-0 w-full bg-white"
     animate={{
       height: `50%`,
       top: `${scrollProgress>41?90:30}px`
